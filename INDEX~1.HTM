@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filip Halás — Informatics Student &amp; Developer</title>
+<meta name="description" content="Filip Halás — Informatics student at IMC Krems, full-stack developer. Chess app, interpreter, Ansible automation.">
+<link rel="icon" href="data:,">
+<style>
+  :root{
+    --bg:#0b0c0f;
+    --panel:#15171c;
+    --panel-2:#1b1e25;
+    --border:#262a33;
+    --text:#eef0f3;
+    --muted:#9aa1ad;
+    --accent:#6c8cff;
+    --accent-2:#8b6cff;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(108,140,255,0.08), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(139,108,255,0.08), transparent 40%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height:1.6;
+  }
+  .bg-grid{
+    position:fixed;inset:0;z-index:-1;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(circle at 50% 0%, black, transparent 75%);
+  }
+  .container{max-width:920px;margin:0 auto;padding:0 24px;}
+
+  /* Nav */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(11,12,15,0.75);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0.9rem 24px;max-width:920px;margin:0 auto;
+  }
+  .nav-left{display:flex;align-items:center;gap:0.7rem;}
+  .nav-left img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid var(--border);}
+  .nav-left span{font-weight:600;font-size:0.95rem;}
+  nav ul{display:flex;list-style:none;gap:1.6rem;}
+  nav ul li a{color:var(--muted);text-decoration:none;font-size:0.92rem;font-weight:500;transition:color .2s;}
+  nav ul li a:hover{color:var(--text);}
+  .nav-right a{
+    color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:600;
+    border:1px solid var(--border);padding:0.4rem 0.85rem;border-radius:8px;transition:.2s;
+  }
+  .nav-right a:hover{color:var(--text);border-color:var(--accent);}
+
+  /* Hero */
+  .hero{padding:4rem 0 2.5rem;}
+  .hero-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:2.5rem 2.2rem;
+    display:flex;align-items:center;gap:2rem;
+    flex-wrap:wrap;
+  }
+  .hero-avatar{
+    width:110px;height:110px;border-radius:50%;object-fit:cover;
+    border:2px solid var(--border);
+    box-shadow:0 0 0 6px rgba(108,140,255,0.06);
+    flex-shrink:0;
+  }
+  .hero-text h1{
+    font-size:2.1rem;font-weight:800;display:flex;align-items:center;gap:0.6rem;
+  }
+  .wave{display:inline-block;animation:wave 2.4s infinite;transform-origin:70% 70%;}
+  @keyframes wave{
+    0%,60%,100%{transform:rotate(0deg);}
+    10%{transform:rotate(14deg);}
+    20%{transform:rotate(-8deg);}
+    30%{transform:rotate(14deg);}
+    40%{transform:rotate(-4deg);}
+    50%{transform:rotate(10deg);}
+  }
+  .hero-text p{color:var(--muted);margin-top:0.5rem;font-size:1.05rem;}
+  .social-row{display:flex;gap:0.6rem;margin-top:1.2rem;flex-wrap:wrap;}
+  .social-row a{
+    width:38px;height:38px;border-radius:9px;
+    background:var(--panel-2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);text-decoration:none;transition:.2s;
+  }
+  .social-row a:hover{color:var(--text);border-color:var(--accent);transform:translateY(-2px);}
+  .social-row svg{width:18px;height:18px;}
+
+  /* Sections */
+  section{padding:2rem 0;}
+  h2.section-title{
+    font-size:1.7rem;font-weight:800;text-align:center;margin-bottom:1.6rem;
+  }
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:1.6rem 1.8rem;
+    margin-bottom:1.2rem;
+  }
+  .panel h3{font-size:1.15rem;margin-bottom:0.6rem;text-align:center;}
+  .panel p{color:var(--muted);font-size:0.96rem;}
+  .panel > p{text-align:center;}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+
+  .tag-row{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:1rem;}
+  .tag{
+    display:flex;align-items:center;gap:0.45rem;
+    background:var(--panel-2);border:1px solid var(--border);
+    padding:0.4rem 0.75rem;border-radius:8px;font-size:0.82rem;font-weight:600;
+    color:var(--text);white-space:nowrap;flex-shrink:0;
+  }
+  .tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+  .tag .tag-icon{width:16px;height:16px;object-fit:contain;flex-shrink:0;}
+
+  /* Marquee skill rows */
+  .marquee-wrap{
+    overflow:hidden;position:relative;margin-top:1.1rem;
+    -webkit-mask-image:linear-gradient(90deg,transparent,black 6%,black 94%,transparent);
+    mask-image:linear-gradient(90deg,transparent,black 6%,black 94%,transparent);
+  }
+  .marquee-track{display:flex;gap:0.6rem;width:max-content;animation:marquee 26s linear infinite;}
+  .marquee-track.reverse{animation-direction:reverse;}
+  .marquee-wrap:hover .marquee-track{animation-play-state:paused;}
+  @keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* Timeline */
+  .timeline-item{
+    position:relative;padding-left:1.5rem;padding-bottom:1.5rem;border-left:2px solid var(--border);
+  }
+  .timeline-item:last-child{border-color:transparent;padding-bottom:0;}
+  .timeline-item::before{
+    content:'';position:absolute;left:-6.5px;top:2px;width:11px;height:11px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 0 4px rgba(108,140,255,0.15);
+  }
+  .timeline-date{color:var(--accent);font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.03em;}
+  .timeline-item h4{margin:0.25rem 0 0.35rem;font-size:1.05rem;}
+  .timeline-item p{color:var(--muted);font-size:0.92rem;}
+
+  /* Experience-style cards (used for Projects) */
+  .exp-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:1.5rem;display:flex;gap:1.2rem;margin-bottom:1.2rem;
+    transition:border-color .2s;
+  }
+  .exp-card:hover{border-color:var(--accent);}
+  .exp-icon{
+    width:64px;height:64px;border-radius:14px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+    background:linear-gradient(135deg, rgba(108,140,255,0.18), rgba(139,108,255,0.18));
+    border:1px solid var(--border);
+  }
+  .exp-body{flex:1;min-width:0;}
+  .exp-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem;flex-wrap:wrap;}
+  .exp-top h3{font-size:1.12rem;}
+  .exp-sub{color:var(--muted);font-size:0.85rem;margin-top:0.15rem;}
+  .exp-status{
+    font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:20px;white-space:nowrap;
+    background:rgba(108,140,255,0.15);color:#a9bcff;
+  }
+  .exp-body p.exp-desc{color:var(--muted);font-size:0.92rem;margin-top:0.65rem;}
+  .tech-icons{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.85rem;}
+  .tech-icons .tech-chip{
+    display:flex;align-items:center;gap:0.35rem;background:var(--panel-2);
+    border:1px solid var(--border);border-radius:7px;padding:0.28rem 0.55rem;font-size:0.75rem;font-weight:600;
+  }
+  .tech-icons .tech-chip img{width:14px;height:14px;object-fit:contain;}
+  .exp-actions{display:flex;gap:0.7rem;margin-top:1rem;flex-wrap:wrap;}
+  .pill-btn{
+    color:var(--text);text-decoration:none;font-size:0.83rem;font-weight:700;
+    border:1px solid var(--border);padding:0.5rem 1rem;border-radius:9px;transition:.2s;
+    background:var(--panel-2);
+  }
+  .pill-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .pill-btn.ghost{background:transparent;}
+
+  /* Languages */
+  .lang-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+  .lang-row:last-child{margin-bottom:0;}
+  .lang-name{font-weight:700;font-size:0.92rem;min-width:90px;}
+  .lang-bar-track{flex:1;height:8px;background:var(--panel-2);border-radius:20px;margin:0 1rem;overflow:hidden;}
+  .lang-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:20px;}
+  .lang-level{font-size:0.8rem;color:var(--muted);min-width:28px;text-align:right;}
+
+  /* Recommendation */
+  .quote-panel{border-left:3px solid var(--accent);}
+  .quote-panel p.quote-text{color:var(--text);font-style:italic;font-size:0.96rem;text-align:left;}
+  .quote-author{margin-top:1rem;color:var(--muted);font-size:0.85rem;font-weight:600;}
+
+  /* Hobbies */
+  .hobby-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.9rem;}
+  .hobby-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:1.1rem 0.8rem;text-align:center;font-size:0.85rem;color:var(--muted);
+  }
+  .hobby-card .emoji{font-size:1.6rem;display:block;margin-bottom:0.4rem;}
+
+  /* Contact / Footer */
+  footer{padding:3rem 0 2.5rem;text-align:center;}
+  .contact-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:2.2rem;text-align:center;
+  }
+  .contact-card h2{font-size:1.5rem;margin-bottom:0.5rem;}
+  .contact-card p{color:var(--muted);margin-bottom:1.3rem;}
+  .contact-btn{
+    display:inline-flex;align-items:center;gap:0.5rem;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:white;text-decoration:none;font-weight:700;font-size:0.92rem;
+    padding:0.7rem 1.4rem;border-radius:10px;transition:.2s;
+  }
+  .contact-btn:hover{filter:brightness(1.1);transform:translateY(-2px);}
+  .footer-note{margin-top:2rem;color:#555b68;font-size:0.8rem;}
+
+  .fade-in{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s ease;}
+  .fade-in.visible{opacity:1;transform:none;}
+
+  @media (max-width:720px){
+    .grid-2{grid-template-columns:1fr;}
+    .hobby-grid{grid-template-columns:repeat(2,1fr);}
+    nav ul{display:none;}
+    .hero-card{padding:1.8rem;}
+    .hero-text h1{font-size:1.6rem;}
+    .exp-card{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<header>
+  <div class="nav-inner">
+    <div class="nav-left">
+      <img src="assets/cv_avatar_lg.png" alt="Filip Halás">
+      <span>Filip Halás</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#education">Education</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <a href="https://github.com/filipphalas" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <section class="hero">
+    <div class="hero-card fade-in">
+      <img class="hero-avatar" src="assets/cv_avatar_lg.png" alt="Filip Halás">
+      <div class="hero-text">
+        <h1>Hey, I'm Filip <span class="wave">👋</span></h1>
+        <p>20-year-old Informatics student &amp; full-stack developer, based between Bratislava, Slovakia and Krems, Austria.</p>
+        <div class="social-row">
+          <a href="https://github.com/filipphalas" target="_blank" rel="noopener" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.79-.25.79-.55 0-.27-.01-1.15-.02-2.09-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.28 5.69.42.36.78 1.08.78 2.18 0 1.57-.02 2.84-.02 3.23 0 .3.21.66.8.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+          </a>
+          <a href="mailto:filipphalas@gmail.com" title="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          </a>
+          <a href="https://www.imc.ac.at/en/" target="_blank" rel="noopener" title="IMC Krems University of Applied Sciences">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+          </a>
+          <a href="https://www.galileoschool.sk/html/en/index.html" target="_blank" rel="noopener" title="Galileo School Bratislava">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title fade-in">About Me</h2>
+    <div class="panel fade-in">
+      <h3>Overall</h3>
+      <p>I've been coding since I was 15, so it's been about 5 years now of building things — from small scripts to full applications with a database and tests behind them. Right now I'm digging into Ansible, and it's become a real passion of mine; I'd love to land a job where I get to work with it and the rest of the DevOps stack day to day. Whatever I'm building, the part I enjoy most is the same: creating something and getting genuine satisfaction when other people actually use and appreciate the end product.</p>
+    </div>
+    <div class="panel fade-in">
+      <h3 id="skills">Frontend</h3>
+      <p>Building interfaces on top of the logic I write, from plain HTML/CSS/JS up through modern component frameworks.</p>
+      <div class="marquee-wrap" id="marquee-frontend"></div>
+    </div>
+    <div class="panel fade-in">
+      <h3>Backend</h3>
+      <p>Python-first, but comfortable across the JS backend ecosystem too — APIs, databases, and the frameworks that connect them.</p>
+      <div class="marquee-wrap" id="marquee-backend"></div>
+    </div>
+    <div class="panel fade-in">
+      <h3>Other Technologies</h3>
+      <p>The tools, services, and infrastructure I use day to day when building and shipping projects.</p>
+      <div class="marquee-wrap" id="marquee-other"></div>
+    </div>
+    <div class="panel fade-in">
+      <h3>Currently Learning — DevOps</h3>
+      <p>Deep in Ansible right now, alongside Docker and Kubernetes — this is the direction I want my career to go.</p>
+      <div class="marquee-wrap" id="marquee-devops"></div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2 class="section-title fade-in">Projects</h2>
+
+    <div class="exp-card fade-in">
+      <div class="exp-icon">♞</div>
+      <div class="exp-body">
+        <div class="exp-top">
+          <h3>Sovo Chess App</h3>
+          <span class="exp-status">Complete</span>
+        </div>
+        <div class="exp-sub">Personal project</div>
+        <p class="exp-desc">A fully functional chess application built with Python (OOP) inside the Django framework, with an HTML/CSS/JS frontend, a SQLite database, and a Pytest test suite covering the game logic.</p>
+        <div class="tech-icons">
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:python.svg" alt=""><span>Python</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:django-icon.svg" alt=""><span>Django</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:html-5.svg" alt=""><span>HTML</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:css-3.svg" alt=""><span>CSS</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:javascript.svg" alt=""><span>JavaScript</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:sqlite.svg" alt=""><span>SQLite</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/simple-icons:pytest.svg?color=%230A9EDC" alt=""><span>Pytest</span></span>
+        </div>
+        <div class="exp-actions">
+          <a class="pill-btn" href="https://github.com/filipphalas/SovoChessApp" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-card fade-in">
+      <div class="exp-icon">🧩</div>
+      <div class="exp-body">
+        <div class="exp-top">
+          <h3>Interpreter</h3>
+          <span class="exp-status">In Progress</span>
+        </div>
+        <div class="exp-sub">Personal project</div>
+        <p class="exp-desc">A from-scratch interpreter written in Python — parsing and evaluating code as a way to dig into how programming languages actually work under the hood.</p>
+        <div class="tech-icons">
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:python.svg" alt=""><span>Python</span></span>
+        </div>
+        <div class="exp-actions">
+          <a class="pill-btn" href="https://github.com/filipphalas/Interpreter" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-card fade-in">
+      <div class="exp-icon">⚙️</div>
+      <div class="exp-body">
+        <div class="exp-top">
+          <h3>Ansible Nginx Automation</h3>
+          <span class="exp-status">In Progress</span>
+        </div>
+        <div class="exp-sub">Personal project · DevOps</div>
+        <p class="exp-desc">An infrastructure-as-code project automating Nginx setup and deployment with Ansible, containerized with Docker — part of my current push into DevOps and the area I'm most excited about.</p>
+        <div class="tech-icons">
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:ansible.svg" alt=""><span>Ansible</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:docker-icon.svg" alt=""><span>Docker</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/simple-icons:nginx.svg?color=%23ffffff" alt=""><span>Nginx</span></span>
+        </div>
+        <div class="exp-actions">
+          <a class="pill-btn" href="https://github.com/filipphalas/ansible-nginx-automation" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-card fade-in">
+      <div class="exp-icon">🎮</div>
+      <div class="exp-body">
+        <div class="exp-top">
+          <h3>Adventure Game</h3>
+          <span class="exp-status">Ongoing</span>
+        </div>
+        <div class="exp-sub">Personal project</div>
+        <p class="exp-desc">A PyGame adventure where players run through forests, deserts, and other terrain, solving puzzles, defeating bosses, and unlocking upgrades like speed, jump boosts, regeneration, and weapons.</p>
+        <div class="tech-icons">
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:python.svg" alt=""><span>Python</span></span>
+          <span class="tech-chip"><img src="https://api.iconify.design/simple-icons:pygame.svg?color=%23ffffff" alt=""><span>PyGame</span></span>
+        </div>
+        <div class="exp-actions">
+          <a class="pill-btn" href="https://github.com/filiphalas78" target="_blank" rel="noopener">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-card fade-in">
+      <div class="exp-icon">✈️</div>
+      <div class="exp-body">
+        <div class="exp-top">
+          <h3>Airplane Ticket Price Predictor</h3>
+          <span class="exp-status">In Progress</span>
+        </div>
+        <div class="exp-sub">Personal project · Data analysis</div>
+        <p class="exp-desc">A data project analyzing airline price trends to help spot the best time to buy a ticket.</p>
+        <div class="tech-icons">
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:python.svg" alt=""><span>Python</span></span>
+        </div>
+        <div class="exp-actions">
+          <a class="pill-btn" href="https://imgur.com/a/qtCC8ja" target="_blank" rel="noopener">View Preview</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-card fade-in">
+      <div class="exp-icon">⛏️</div>
+      <div class="exp-body">
+        <div class="exp-top">
+          <h3>Minecraft Mod Development</h3>
+          <span class="exp-status">Since 2019</span>
+        </div>
+        <div class="exp-sub">Personal project · Where it all started</div>
+        <p class="exp-desc">My first real programming project — self-taught Java building PvP mods for Craftbukkit/Spigot 1.8.9, which is what first got me into coding at 15.</p>
+        <div class="tech-icons">
+          <span class="tech-chip"><img src="https://api.iconify.design/logos:java.svg" alt=""><span>Java</span></span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section id="education">
+    <h2 class="section-title fade-in">Education</h2>
+    <div class="panel fade-in">
+      <div class="timeline-item">
+        <div class="timeline-date">Sep 2025 — Current</div>
+        <h4>BSc in Engineering, Informatics</h4>
+        <p>IMC Krems University of Applied Sciences, Austria</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">2020 — June 2025</div>
+        <h4>Matriculation</h4>
+        <p>Galileo School, Bratislava — private high school with English as the language of instruction.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-date">Oct 2024</div>
+        <h4>IELTS Academic — British Council</h4>
+        <p>Overall band 7.0 (Listening 7.5, Reading 7.0, Writing 6.0, Speaking 8.0)</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="languages">
+    <h2 class="section-title fade-in">Languages</h2>
+    <div class="panel fade-in">
+      <div class="lang-row"><span class="lang-name">Slovak</span><div class="lang-bar-track"><div class="lang-bar-fill" style="width:100%"></div></div><span class="lang-level">Native</span></div>
+      <div class="lang-row"><span class="lang-name">English</span><div class="lang-bar-track"><div class="lang-bar-fill" style="width:100%"></div></div><span class="lang-level">C2</span></div>
+      <div class="lang-row"><span class="lang-name">Czech</span><div class="lang-bar-track"><div class="lang-bar-fill" style="width:88%"></div></div><span class="lang-level">C1</span></div>
+      <div class="lang-row"><span class="lang-name">Spanish</span><div class="lang-bar-track"><div class="lang-bar-fill" style="width:55%"></div></div><span class="lang-level">B1</span></div>
+    </div>
+  </section>
+
+  <section id="recommendation">
+    <h2 class="section-title fade-in">Recommendation</h2>
+    <div class="panel quote-panel fade-in">
+      <p class="quote-text">"Over the past three years, I have had the privilege of teaching Filip Computer Science and Physics, during which he has consistently demonstrated a deep passion for learning and an exceptional aptitude for programming and technology... Filip's curiosity, determination, and proactive approach to learning will undoubtedly make him a valuable asset to any program or institution he joins."</p>
+      <div class="quote-author">— Pavol Hrdý, Teacher of Physics &amp; Computer Science, Galileo School Bratislava</div>
+    </div>
+  </section>
+
+  <section id="hobbies">
+    <h2 class="section-title fade-in">Outside of Code</h2>
+    <div class="hobby-grid fade-in">
+      <div class="hobby-card"><span class="emoji">🏋️</span>Gym, swimming &amp; hiking</div>
+      <div class="hobby-card"><span class="emoji">🎮</span>Studying CS &amp; gaming</div>
+      <div class="hobby-card"><span class="emoji">🍳</span>Cooking</div>
+      <div class="hobby-card"><span class="emoji">👨‍👩‍👧</span>Time with family &amp; friends</div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <div class="contact-card fade-in">
+      <h2>Let's build something.</h2>
+      <p>Open to internships, collaboration, or just talking about code.</p>
+      <a class="contact-btn" href="mailto:filipphalas@gmail.com">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+        filipphalas@gmail.com
+      </a>
+      <div class="footer-note">Built by Filip Halás · Bratislava, Slovakia / Krems, Austria</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- skill data ----
+  function icon(name, color) {
+    return `https://api.iconify.design/${name}.svg` + (color ? `?color=${encodeURIComponent(color)}` : '');
+  }
+
+  const FRONTEND = [
+    { name: 'HTML', icon: icon('logos:html-5') },
+    { name: 'CSS', icon: icon('logos:css-3') },
+    { name: 'JavaScript', icon: icon('logos:javascript') },
+    { name: 'React.js', icon: icon('logos:react') },
+    { name: 'Vue.js', icon: icon('logos:vue') },
+    { name: 'Angular', icon: icon('logos:angular-icon') },
+    { name: 'Tailwind CSS', icon: icon('logos:tailwindcss-icon') },
+    { name: 'Bootstrap', icon: icon('logos:bootstrap') },
+  ];
+
+  const BACKEND = [
+    { name: 'Python', icon: icon('logos:python') },
+    { name: 'Django', icon: icon('logos:django-icon') },
+    { name: 'Node.js', icon: icon('logos:nodejs-icon') },
+    { name: 'TypeScript', icon: icon('logos:typescript-icon') },
+    { name: 'Spring Boot', icon: icon('logos:spring-icon') },
+    { name: 'MongoDB', icon: icon('logos:mongodb-icon') },
+    { name: 'SQLite', icon: icon('logos:sqlite') },
+    { name: 'Fastify', icon: icon('simple-icons:fastify', '#ffffff') },
+    { name: 'Discord.js', icon: icon('logos:discord-icon') },
+    { name: 'Pytest', icon: icon('simple-icons:pytest', '#0A9EDC') },
+  ];
+
+  const OTHER = [
+    { name: 'VS Code', icon: icon('logos:visual-studio-code') },
+    { name: 'Insomnia', icon: icon('simple-icons:insomnia', '#7C3AED') },
+    { name: 'Hetzner', icon: icon('simple-icons:hetzner', '#D50C2D') },
+    { name: 'Porkbun', icon: icon('simple-icons:porkbun', '#EF7878') },
+    { name: 'Linux', icon: icon('simple-icons:linux', '#ffffff') },
+    { name: 'Git', icon: icon('logos:git-icon') },
+    { name: 'GitHub', icon: icon('simple-icons:github', '#ffffff') },
+    { name: 'NPM', icon: icon('logos:npm-icon') },
+  ];
+
+  const DEVOPS = [
+    { name: 'Ansible', icon: icon('logos:ansible') },
+    { name: 'Docker', icon: icon('logos:docker-icon') },
+    { name: 'Kubernetes', icon: icon('logos:kubernetes') },
+  ];
+
+  function buildMarquee(containerId, items, reverse) {
+    const wrap = document.getElementById(containerId);
+    if (!wrap) return;
+    const track = document.createElement('div');
+    track.className = 'marquee-track' + (reverse ? ' reverse' : '');
+    const seq = items.concat(items); // duplicate for seamless loop
+    seq.forEach(function (it) {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      const img = document.createElement('img');
+      img.className = 'tag-icon';
+      img.src = it.icon;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.onerror = function () { img.style.display = 'none'; };
+      tag.appendChild(img);
+      tag.appendChild(document.createTextNode(it.name));
+      track.appendChild(tag);
+    });
+    wrap.appendChild(track);
+  }
+
+  buildMarquee('marquee-frontend', FRONTEND, false);
+  buildMarquee('marquee-backend', BACKEND, true);
+  buildMarquee('marquee-other', OTHER, false);
+  buildMarquee('marquee-devops', DEVOPS, true);
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
